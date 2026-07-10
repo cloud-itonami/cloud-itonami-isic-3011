@@ -1,0 +1,12 @@
+{:itonami.blueprint/id "cloud-itonami-isic-3011"
+ :itonami.blueprint/name "Building of Ships and Floating Structures"
+ :itonami.blueprint/isic-rev5 "3011"
+ :itonami.blueprint/domain :manufacturing/shipbuilding
+ :itonami.blueprint/license "AGPL-3.0-or-later"
+ :itonami.blueprint/social-impact [:maritime-safety :supply-resilience :industrial-jobs]
+ :itonami.blueprint/governor :shipyard-governor
+ :itonami.blueprint/robotics true
+ :itonami.blueprint/required-technologies [:robotics :cae :dmn :bpmn :audit-ledger]
+ :itonami.blueprint/optional-technologies [:cfd :telemetry :optimization]
+ :itonami.blueprint/status :public-oss
+ :itonami.blueprint/maturity :implemented}

@@ -1,0 +1,84 @@
+(ns shipyard.sim
+  "Demo driver -- `clojure -M:dev:run`. Walks a clea block through
+  intake -> requirements verification -> NDT-defect screening ->
+  block-dispatch proposal (always escalates) -> human approval ->
+  commit, then through class-evidence proposal (always
+  escalates) -> human approval -> commit, then shows five HARD holds
+  (a jurisdiction with no spec-basis, an out-of-spec assembly
+  tolerance, an unresolved NDT defect screened directly via `:ndt/
+  screen` [never via an actuation op against an unscreened block --
+  see this actor's own governor ns docstring / the lesson
+  `parksafety`'s ADR-2607071922 Decision 5, `eldercare`'s, `museum`'s,
+  `conservation`'s, `salon`'s, `entertainment`'s, `casework`'s,
+  `hospital`'s, `facility`'s, `school`'s, `association`'s, `leasing`'s,
+  `behavioral`'s, `secondary`'s, `card`'s, `water`'s and `telecom`'s
+  ADR-0001s already recorded], and a double block-dispatch/
+  class-evidence-issuance of an already-processed block)
+  that never reach a human at all, and prints the audit ledger + the
+  draft block-dispatch and class-evidence records."
+  (:require [langgraph.graph :as g]
+            [shipyard.store :as store]
+            [shipyard.operation :as op]))
+
+(def operator {:actor-id "op-1" :actor-role :shipyard-engineer :phase 3})
+
+(defn- exec! [actor tid request context]
+  (g/run* actor {:request request :context context} {:thread-id tid}))
+
+(defn- approve! [actor tid]
+  (g/run* actor {:approval {:status :approved :by "op-1"}} {:thread-id tid :resume? true}))
+
+(defn -main [& _]
+  (let [db (store/seed-db)
+        actor (op/build db)]
+    (println "== block/intake block-1 (JPN, clean; tolerance within spec, no NDT defect) ==")
+    (println (exec! actor "t1" {:op :block/intake :subject "block-1"
+                                :patch {:id "block-1" :unit-name "Sakura Double-Bottom Block DB-04"}} operator))
+
+    (println "== class-rules/verify block-1 (escalates -- human approves) ==")
+    (println (exec! actor "t2" {:op :class-rules/verify :subject "block-1"} operator))
+    (println (approve! actor "t2"))
+
+    (println "== ndt/screen block-1 (clean; escalates -- human approves) ==")
+    (println (exec! actor "t3" {:op :ndt/screen :subject "block-1"} operator))
+    (println (approve! actor "t3"))
+
+    (println "== actuation/dispatch-block block-1 (always escalates -- actuation/dispatch-block) ==")
+    (let [r (exec! actor "t4" {:op :actuation/dispatch-block :subject "block-1"} operator)]
+      (println r)
+      (println "-- human shipyard engineer approves --")
+      (println (approve! actor "t4")))
+
+    (println "== actuation/issue-class-evidence block-1 (always escalates -- actuation/issue-class-evidence) ==")
+    (let [r (exec! actor "t5" {:op :actuation/issue-class-evidence :subject "block-1"} operator)]
+      (println r)
+      (println "-- human shipyard engineer approves --")
+      (println (approve! actor "t5")))
+
+    (println "== class-rules/verify block-2 (no spec-basis -> HARD hold) ==")
+    (println (exec! actor "t6" {:op :class-rules/verify :subject "block-2" :no-spec? true} operator))
+
+    (println "== class-rules/verify block-3 (escalates -- human approves; sets up the out-of-spec test) ==")
+    (println (exec! actor "t7" {:op :class-rules/verify :subject "block-3"} operator))
+    (println (approve! actor "t7"))
+
+    (println "== actuation/dispatch-block block-3 (0.35 outside [-0.10,0.10] tolerance -> HARD hold) ==")
+    (println (exec! actor "t8" {:op :actuation/dispatch-block :subject "block-3"} operator))
+
+    (println "== ndt/screen block-4 (unresolved -> HARD hold, never reaches a human) ==")
+    (println (exec! actor "t9" {:op :ndt/screen :subject "block-4"} operator))
+
+    (println "== actuation/dispatch-block block-1 AGAIN (double-dispatch -> HARD hold) ==")
+    (println (exec! actor "t10" {:op :actuation/dispatch-block :subject "block-1"} operator))
+
+    (println "== actuation/issue-class-evidence block-1 AGAIN (double-issuance -> HARD hold) ==")
+    (println (exec! actor "t11" {:op :actuation/issue-class-evidence :subject "block-1"} operator))
+
+    (println "== audit ledger ==")
+    (doseq [f (store/ledger db)] (println f))
+
+    (println "== draft block-dispatch records ==")
+    (doseq [r (store/dispatch-history db)] (println r))
+
+    (println "== draft class-evidence records ==")
+    (doseq [r (store/evidence-history db)] (println r))))
