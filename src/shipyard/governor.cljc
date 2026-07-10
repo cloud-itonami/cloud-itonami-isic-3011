@@ -123,7 +123,7 @@
       (when (or (empty? (:cites proposal))
                 (and (contains? value :spec-basis) (nil? (:spec-basis value))))
         [{:rule :no-spec-basis
-          :detail "公式spec-basisの引用が無い提案は耐空性要件として扱えない"}]))))
+          :detail "公式spec-basisの引用が無い提案は船級要件として扱えない"}]))))
 
 (defn- evidence-incomplete-violations
   "For `:actuation/dispatch-block`/`:actuation/issue-class-
@@ -169,7 +169,7 @@
         hit-on-file? (and block-id (= :unresolved (:verdict (store/ndt-screen-of st block-id))))]
     (when (or hit-in-proposal? hit-on-file?)
       [{:rule :ndt-defect-unresolved
-        :detail "未解決の非破壊検査欠陥がある状態での耐空性証拠発行提案は進められない"}])))
+        :detail "未解決の非破壊検査欠陥がある状態での船級証拠発行提案は進められない"}])))
 
 (defn- already-dispatched-violations
   "For `:actuation/dispatch-block`, refuses to dispatch a block
@@ -179,7 +179,7 @@
   (when (= op :actuation/dispatch-block)
     (when (store/block-already-dispatched? st subject)
       [{:rule :already-dispatched
-        :detail (str subject " は既に組立実行済み")}])))
+        :detail (str subject " は既にブロック実行済み")}])))
 
 (defn- already-certified-violations
   "For `:actuation/issue-class-evidence`, refuses to issue
@@ -189,7 +189,7 @@
   (when (= op :actuation/issue-class-evidence)
     (when (store/block-already-certified? st subject)
       [{:rule :already-certified
-        :detail (str subject " は既に耐空性証拠発行済み")}])))
+        :detail (str subject " は既に船級証拠発行済み")}])))
 
 (defn check
   "Censors an Shipyard Advisor proposal against the governor rules.

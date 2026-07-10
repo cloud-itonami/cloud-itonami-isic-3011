@@ -67,6 +67,19 @@ and hardware dispatch are the shipyard's own acts.
 | `:actuation/dispatch-block` | draft block-dispatch record (always human) |
 | `:actuation/issue-class-evidence` | draft class-evidence record (always human) |
 
+## Social / regulatory hand-off
+
+```clojure
+(require '[shipyard.store :as store]
+         '[shipyard.export :as export])
+
+(def db (store/seed-db))
+(export/audit-package db)           ;; EDN maps for class/flag hand-off
+(export/package->csv-bundle db)     ;; CSV bundle (blocks/ledger/dispatches/class-evidence)
+```
+
+Operator console (static sample): `docs/samples/operator-console.html`.
+
 ## Develop
 
 ```bash

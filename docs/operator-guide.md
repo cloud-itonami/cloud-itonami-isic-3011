@@ -19,3 +19,19 @@ records and human review for safety-affecting actions.
 
 ## Operating states
 intake : class-rules-verify : ndt-screen : approve : dispatch-block : issue-class-evidence : audit
+
+## Audit export (social operation)
+
+After a production session, export the append-only package for class
+surveyors or internal compliance:
+
+```clojure
+(require '[shipyard.export :as export])
+(export/audit-package store)        ; EDN maps
+(export/package->csv-bundle store)  ; CSV files as string map
+```
+
+Drafts remain **unsigned** — signing and submission to a class society
+are the shipyard's own acts (see README Actuation honesty).
+
+Static UI sample: `docs/samples/operator-console.html`.

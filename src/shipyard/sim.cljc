@@ -17,6 +17,7 @@
   that never reach a human at all, and prints the audit ledger + the
   draft block-dispatch and class-evidence records."
   (:require [langgraph.graph :as g]
+            [shipyard.export :as export]
             [shipyard.store :as store]
             [shipyard.operation :as op]))
 
@@ -81,4 +82,9 @@
     (doseq [r (store/dispatch-history db)] (println r))
 
     (println "== draft class-evidence records ==")
-    (doseq [r (store/evidence-history db)] (println r))))
+    (doseq [r (store/evidence-history db)] (println r))
+
+    (println "== social hand-off: audit package counts ==")
+    (println (:counts (export/audit-package db)))
+    (println "== social hand-off: CSV bundle keys ==")
+    (println (keys (export/package->csv-bundle db)))))

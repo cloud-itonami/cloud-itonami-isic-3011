@@ -39,7 +39,7 @@
   does not invent the block, dimensional-tolerance figures or
   jurisdiction. High confidence, low stakes."
   [_db {:keys [patch]}]
-  {:summary    (str "組立記録更新: " (pr-str (keys patch)))
+  {:summary    (str "ブロック記録更新: " (pr-str (keys patch)))
    :rationale  "入力 patch の正規化のみ。新規事実の生成なし。"
    :cites      (vec (keys patch))
    :effect     :block/upsert
@@ -86,7 +86,7 @@
   (let [a (store/block db subject)]
     (cond
       (nil? a)
-      {:summary "対象組立記録が見つかりません" :rationale "no block record"
+      {:summary "対象ブロック記録が見つかりません" :rationale "no block record"
        :cites [] :effect :ndt-screen/set :value {:block-id subject :verdict :unknown}
        :stake nil :confidence 0.0}
 
@@ -119,12 +119,12 @@
   deliberately."
   [db {:keys [subject]}]
   (let [a (store/block db subject)]
-    {:summary    (str subject " 向け組立実行提案"
-                      (when a (str " (assembly=" (:unit-name a) ")")))
+    {:summary    (str subject " 向けブロック実行提案"
+                      (when a (str " (block=" (:unit-name a) ")")))
      :rationale  (if a
                    (str "dimensional-tolerance-actual=" (:dimensional-tolerance-actual a)
                         " spec=[" (:dimensional-tolerance-min a) "," (:dimensional-tolerance-max a) "]")
-                   "組立記録が見つかりません")
+                   "ブロック記録が見つかりません")
      :cites      (if a [subject] [])
      :effect     :block/mark-dispatched
      :value      {:block-id subject}
@@ -142,11 +142,11 @@
   agree, deliberately."
   [db {:keys [subject]}]
   (let [a (store/block db subject)]
-    {:summary    (str subject " 向け耐空性証拠発行提案"
-                      (when a (str " (assembly=" (:unit-name a) ")")))
+    {:summary    (str subject " 向け船級証拠発行提案"
+                      (when a (str " (block=" (:unit-name a) ")")))
      :rationale  (if a
                    "jurisdiction-evidence-checklist referenced"
-                   "組立記録が見つかりません")
+                   "ブロック記録が見つかりません")
      :cites      (if a [subject] [])
      :effect     :block/mark-certified
      :value      {:block-id subject}
@@ -176,7 +176,7 @@
   [] (reify Advisor (-advise [_ st req] (infer st req))))
 
 (def ^:private system-prompt
-  (str "あなたは航空宇宙製造事業者の組立実行・耐空性証拠発行エージェントの助言者です。"
+  (str "あなたは造船所のブロック実行・船級証拠発行エージェントの助言者です。"
        "与えられた事実のみに基づき、提案を1つだけEDNマップで返します。説明や前置きは"
        "一切書かず、EDNだけを出力します。\n"
        "キー: :summary(人向けドラフト) :rationale(根拠/必ず事実から) "
