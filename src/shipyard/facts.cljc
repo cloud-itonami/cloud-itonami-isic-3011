@@ -59,7 +59,34 @@
           :required-evidence ["CAE-Simulationsbericht (CAE-simulation-report)"
                               "CFD-Verifizierungsbericht (CFD-verification-report)"
                               "ZfP-Rückverfolgbarkeitsnachweis (NDT-chain-of-custody-record)"
-                              "Werkstoffzertifikat (material-certification-record)"]}})
+                              "Werkstoffzertifikat (material-certification-record)"]}
+   ;; KOR verified this session via the law.go.kr Open API (lawService.do,
+   ;; law ID 001742, fetched as machine-readable XML -- the search UI was
+   ;; not used) and https://www.krs.co.kr/ + https://www.mof.go.kr/en/index.do
+   ;; (both WebFetched directly). Honest gap disclosure: 선박안전법 제60조제2항
+   ;; (Ship Safety Act art. 60(2)) authorizes 해양수산부장관 (the MOF Minister)
+   ;; to delegate ship registration/seaworthiness-evaluation work ("선급업무")
+   ;; to ANY domestic-or-foreign corporation meeting Minister-published
+   ;; criteria (a "선급법인") -- the statute text itself does NOT name 한국선급
+   ;; (Korean Register) by name. KR is listed as the class-society half of
+   ;; owner-authority because KR's own official site (fetched this session)
+   ;; describes itself as performing exactly this delegated role ("Government
+   ;; delegation inspections on behalf of the Korean government"), not
+   ;; because the Act names KR. Similarly, KR's rule body is cited only as
+   ;; "Classification Technical Rules" -- the term KR's own English site
+   ;; uses for it -- because a more specific formal rule-book title (e.g. a
+   ;; numbered "Rules for the Classification of Steel Ships") was not
+   ;; independently confirmed this session, so it is deliberately not
+   ;; asserted.
+   "KOR" {:name "South Korea"
+          :owner-authority "해양수산부 (Ministry of Oceans and Fisheries, MOF) / 한국선급 (Korean Register, KR)"
+          :legal-basis "선박안전법 (Ship Safety Act) 제60조제2항(검사등업무의 대행 -- MOF가 지정한 선급법인에 선급업무를 위임) / 선박법 (Ships Act, 선박의 국적ㆍ톤수측정 및 등록) / 한국선급(KR) Classification Technical Rules"
+          :national-spec "한국 선적 선박의 건조ㆍ검사ㆍ등록 및 선급 요건 (Korean-flag construction, survey, registration and class requirements)"
+          :provenance "https://www.mof.go.kr/en/index.do"
+          :required-evidence ["CAE 시뮬레이션 보고서 (CAE-simulation-report)"
+                              "CFD 검증 보고서 (CFD-verification-report)"
+                              "비파괴검사 이력관리 기록 (NDT-chain-of-custody-record)"
+                              "재료 증명서 (material-certification-record)"]}})
 
 (defn spec-basis
   "The jurisdiction's requirement map, or nil -- nil means NO spec-basis,
