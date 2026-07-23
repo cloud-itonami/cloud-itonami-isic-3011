@@ -86,7 +86,53 @@
           :required-evidence ["CAE 시뮬레이션 보고서 (CAE-simulation-report)"
                               "CFD 검증 보고서 (CFD-verification-report)"
                               "비파괴검사 이력관리 기록 (NDT-chain-of-custody-record)"
-                              "재료 증명서 (material-certification-record)"]}})
+                              "재료 증명서 (material-certification-record)"]}
+   ;; NOR verified this session directly against sdir.no (Sjøfartsdirektoratet
+   ;; / Norwegian Maritime Authority, fetched https://www.sdir.no/en/ --
+   ;; confirmed it is the official NMA site administering ship-safety
+   ;; regulation), lovdata.no (fetched the FULL raw HTML of
+   ;; https://lovdata.no/dokument/NLE/lov/2007-02-16-9 -- Lovdata's English
+   ;; translation of skipssikkerhetsloven -- and extracted its plain text
+   ;; directly, not via a summarizer, to confirm verbatim wording) and
+   ;; dnv.com (fetched https://www.dnv.com/maritime/ ,
+   ;; https://www.dnv.com/about/in-brief/our-history/ and the 2023-07-13
+   ;; DNV news item on the July 2023 rules edition). Honest gap disclosure,
+   ;; mirroring the KOR entry's pattern: § 41 of the Ship Safety and
+   ;; Security Act authorizes the Ministry to delegate "supervisory
+   ;; authority" to "one or more classification societies" by agreement
+   ;; and to regulate "requirements for recognised classification
+   ;; societies" -- the statute text itself does NOT name DNV. DNV is
+   ;; listed as the class-society half of :owner-authority because (a) DNV
+   ;; (Det Norske Veritas) was founded in 1864 in Oslo, Norway -- per DNV's
+   ;; own history page, "as a membership organization ... by mutual marine
+   ;; insurance clubs. We establish a uniform set of rules and procedures
+   ;; to assess the condition and seaworthiness of vessels" -- and remains
+   ;; headquartered in Norway, and (b) DNV's own maritime homepage
+   ;; describes DNV as "the world's leading classification society and a
+   ;; recognized advisor for the maritime industry", not because a specific
+   ;; delegation instrument naming DNV was independently confirmed this
+   ;; session (none was found, so none is asserted). The Lovdata page
+   ;; itself discloses (fetched verbatim): "This is an unofficial
+   ;; translation of the Norwegian version of the Act and is provided for
+   ;; information purposes only. Legal authenticity remains with the
+   ;; Norwegian version as published in Norsk Lovtidend. ... The
+   ;; translation is provided by Sjøfartsdirektoratet – Norwegian Maritime
+   ;; Authority" -- i.e. the English text is the regulator's own
+   ;; translation, not this session's translation. The Norwegian phrases
+   ;; in :required-evidence below, by contrast, ARE this session's own
+   ;; translation of the generic evidence-record set (mirroring the
+   ;; docstring's CAE/CFD/NDT/material-certification checklist) -- they are
+   ;; not official Sjøfartsdirektoratet or DNV terminology and are not
+   ;; presented as such.
+   "NOR" {:name "Norway"
+          :owner-authority "Sjøfartsdirektoratet (Norwegian Maritime Authority, NMA) / DNV (Det Norske Veritas)"
+          :legal-basis "Lov om skipssikkerhet / skipssikkerhetsloven (Ship Safety and Security Act, LOV-2007-02-16-9) § 9 (technical safety -- design, construction and equipment, incl. hull strength) and § 41 (supervisory authority -- Ministry may delegate to recognised classification societies) / DNV Rules for Classification of Ships"
+          :national-spec "NO flag construction, survey and class requirements"
+          :provenance "https://www.sdir.no/en/"
+          :required-evidence ["CAE-simuleringsrapport (CAE-simulation-report)"
+                              "CFD-verifiseringsrapport (CFD-verification-report)"
+                              "NDT-sporbarhetsjournal (NDT-chain-of-custody-record)"
+                              "Materialsertifikat (material-certification-record)"]}})
 
 (defn spec-basis
   "The jurisdiction's requirement map, or nil -- nil means NO spec-basis,

@@ -1,6 +1,6 @@
 # Contributing
 
-`cloud-itonami-3030` accepts contributions to the OSS blueprint, capability
+`cloud-itonami-isic-3011` accepts contributions to the OSS blueprint, capability
 bindings, policy tests, documentation and operator model.
 
 ## Development
@@ -14,7 +14,7 @@ clojure -M:lint
 
 ## Rules
 - Do not commit real operating, personal or credential data.
-- Keep robot dispatch, records and disclosures behind the Aerospace Manufacturing Governor.
+- Keep robot dispatch, records and disclosures behind the Shipyard Governor.
 - Treat workflows as high-risk: add tests for robot-safety gating,
   record integrity, disclosure and audit logging.
 - Document any new business-model or operator assumption in `docs/`.
