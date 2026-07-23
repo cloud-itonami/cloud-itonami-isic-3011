@@ -14,6 +14,14 @@
     (is (re-find #"Korean Register|한국선급" (:owner-authority basis)))
     (is (re-find #"선박안전법|Ship Safety Act" (:legal-basis basis)))))
 
+(deftest nor-has-a-spec-basis
+  (let [basis (facts/spec-basis "NOR")]
+    (is (some? basis))
+    (is (= "Norway" (:name basis)))
+    (is (string? (:provenance basis)))
+    (is (re-find #"DNV|Sjøfartsdirektoratet" (:owner-authority basis)))
+    (is (re-find #"skipssikkerhetsloven|Ship Safety and Security Act" (:legal-basis basis)))))
+
 (deftest unknown-jurisdiction-has-no-fabricated-spec-basis
   (is (nil? (facts/spec-basis "ATL"))))
 
@@ -34,3 +42,9 @@
     (is (seq all))
     (is (facts/required-evidence-satisfied? "KOR" all))
     (is (not (facts/required-evidence-satisfied? "KOR" (rest all))))))
+
+(deftest nor-required-evidence-satisfied-needs-every-item
+  (let [all (facts/evidence-checklist "NOR")]
+    (is (seq all))
+    (is (facts/required-evidence-satisfied? "NOR" all))
+    (is (not (facts/required-evidence-satisfied? "NOR" (rest all))))))
