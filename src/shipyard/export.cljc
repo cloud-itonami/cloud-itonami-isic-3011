@@ -9,7 +9,7 @@
 
   This is the honest delivery of the industry-stack `:export?` contract
   (robotics / audit-ledger capabilities) for ISIC 3011."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [shipyard.store :as store]))
 
 (defn- csv-escape [v]
