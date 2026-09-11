@@ -1,5 +1,5 @@
 (ns shipyard.sim
-  "Demo driver -- `clojure -M:dev:run`. Walks a clea block through
+  "Demo driver -- `kbb -M:dev:run`. Walks a clea block through
   intake -> requirements verification -> NDT-defect screening ->
   block-dispatch proposal (always escalates) -> human approval ->
   commit, then through class-evidence proposal (always
