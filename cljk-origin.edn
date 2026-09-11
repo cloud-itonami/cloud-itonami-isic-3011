@@ -1,0 +1,22 @@
+{:format :kotoba.cljk-origin/v1
+ :renamed-on "2026-09-11"
+ :decision "adr-2609111500-cljk-rename-all-clojure-source (com-junkawasaki/root 90-docs/adr; owner instruction 2026-09-11)"
+ :rule "value = the extension the file had before the rename. A path ending in .clj.cljk or .cljs.cljk kept it in the name because both platform files existed (or the plain target was taken)."
+ :origins
+ {"src/shipyard/export.cljk" ".cljc"
+  "src/shipyard/export_run.cljk" ".clj"
+  "src/shipyard/facts.cljk" ".cljc"
+  "src/shipyard/governor.cljk" ".cljc"
+  "src/shipyard/operation.cljk" ".cljc"
+  "src/shipyard/phase.cljk" ".cljc"
+  "src/shipyard/registry.cljk" ".cljc"
+  "src/shipyard/render_html.cljk" ".clj"
+  "src/shipyard/shipyardadvisor.cljk" ".cljc"
+  "src/shipyard/sim.cljk" ".cljc"
+  "src/shipyard/store.cljk" ".cljc"
+  "test/shipyard/export_test.cljk" ".clj"
+  "test/shipyard/facts_test.cljk" ".clj"
+  "test/shipyard/governor_contract_test.cljk" ".clj"
+  "test/shipyard/phase_test.cljk" ".clj"
+  "test/shipyard/registry_test.cljk" ".clj"
+  "test/shipyard/store_contract_test.cljk" ".clj"}}
