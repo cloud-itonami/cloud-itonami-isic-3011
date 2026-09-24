@@ -1,5 +1,5 @@
 (ns shipyard.registry-test
-  (:require [clojure.test :refer [deftest is]]
+  (:require [kotoba.test :refer [deftest is]]
             [shipyard.registry :as r]))
 
 ;; ----------------------------- block-tolerance-out-of-range? -----------------------------
