@@ -1,0 +1,46 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:dev:physics` runs it.
+;;
+;; README "Robotics premise": weld, fit-up, inspection and NDT-scan robots
+;; build hull blocks and modules under an actor that proposes and an
+;; independent Shipyard Governor that gates (block dispatch and class
+;; evidence need human sign-off). The physical work: tensile-testing the
+;; hull-steel heat before cutting, preheating thick plate ahead of the weld
+;; robot, and moving a finished hull block to the erection berth on a
+;; self-propelled modular transporter.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isic-3011"
+ :cases
+ [{:id :hull-plate-tensile
+   :kind :material
+   :procedure "mill-certificate check: tensile test of an AH36 hull-plate specimen (100 mm2 section) from the heat to be cut into block plates"
+   :params {:length-m 0.10 :area-m2 1.0e-4 :youngs-modulus-pa 206.0e9 :hardening-pa 1.0e9
+            :density-kg-m3 7850.0 :max-force-n 60000.0}
+   :sweep {:param :yield-stress-pa :values [320.0e6 345.0e6 355.0e6 380.0e6 420.0e6]}
+   :quantity :yield-force-n
+   :limit {:min 35500.0 :basis "IACS UR W11 (normal and higher strength hull structural steel), grade AH36: minimum yield strength 355 N/mm2; x 100 mm2 = 35500 N"}
+   :boundary {:lo 300.0e6 :hi 450.0e6}}
+  {:id :weld-preheat-thick-plate
+   :kind :thermal
+   :procedure "preheat torch heats one face of a butt-joint plate until the far face reaches the 100 C minimum preheat before the weld robot starts"
+   :params {:conductivity-w-mk 45.0 :density-kg-m3 7850.0 :specific-heat-j-kgk 480.0
+            :t0-c 10.0 :t-hot-c 350.0 :h-front-w-m2k 150.0 :t-back-ambient-c 10.0 :h-back-w-m2k 10.0
+            :threshold-c 100.0 :duration-s 3600.0 :nodes 11}
+   :sweep {:param :thickness-m :values [0.015 0.025 0.040 0.060 0.080]}
+   :quantity :time-to-threshold-s
+   :limit {:max 900.0 :basis "estimate: a 15-minute preheat window per joint before the weld robot's slot is lost; flame h = 150 W/m2K is also an estimate"}
+   :boundary {:lo 0.008 :hi 0.12}}
+  {:id :hull-block-to-berth
+   :kind :transport
+   :procedure "self-propelled modular transporter carries a finished hull block from the block shop to the erection berth (300 m)"
+   :params {:mass-kg 30000.0 :distance-m 300.0 :v-max-mps 0.8 :a-max-mps2 0.10
+            :brake-decel-mps2 0.20 :drive-force-n 150000.0 :crr 0.02
+            :cog-height-m 1.2 :support-half-length-m 6.0 :payload-cog-height-m 4.0
+            :max-time-s 7200.0}
+   :sweep {:param :payload-kg :values [50000.0 100000.0 200000.0 300000.0 400000.0]}
+   :quantity :cycle-time-s
+   :limit {:max 600.0 :basis "estimate: one block move inside the berth crane's 10-minute hook-on window"}
+   :boundary {:lo 20000.0 :hi 900000.0}}]}
